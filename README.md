@@ -9,8 +9,6 @@ Requirements
 
 ## Platform:
 
-* Centos 6.5
-* Centos 7.0
 * Ubuntu 14.04
 
 Notes
