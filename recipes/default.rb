@@ -23,25 +23,9 @@ include_recipe 'apt'
 include_recipe 'git'
 include_recipe 'poise-python'
 
-package ['cmake','zlib1g-dev'] do
+package ['cmake', 'zlib1g-dev'] do
   action :install
 end
-
-# This is necessary for bamtools and libbamtools-dev
-# See: http://bioinf.uni-greifswald.de/augustus/binaries/README.TXT
-#apt_repository 'us.archive.ubuntu.com' do
-#  uri 'http://us.archive.ubuntu.com/ubuntu'
-#  distribution 'vivid'
-#  components %w(main universe)
-#end
-# packages that need the older apt-repository
-#package ['bamtools', 'libbamtools-dev'] do
-#  action :install
-#end
-# remove the entry to avoid corrupting apt
-#apt_repository 'us.archive.ubuntu.com' do
-#  action :remove
-#end
 
 # bamtools dependency
 git node['sga']['bamtools_install_path'] do
@@ -57,7 +41,7 @@ bash 'Install bamtools' do
     cmake ..
     make
   EOH
- # not_if { ::File.exist?('/usr/local/include/google/sparsehash/sparsehashtable.h') }
+  not_if { ::File.exist?('/usr/local/bamtools/bin/bamtools') }
 end
 
 # sparse_hash dependency
@@ -90,7 +74,7 @@ bash 'Install jemalloc header files' do
     ./autogen.sh
     ./configure
     make
-    make install_bin install_include install_lib    
+    make install_bin install_include install_lib
   EOH
   not_if { ::File.exist?('/usr/local/include/jemalloc/jemalloc.h') }
 end
@@ -114,12 +98,10 @@ bash 'Install SGA' do
     make install
   EOH
   # not_if { ::File.exist?('/usr/local/include/google/sparsehash/sparsehashtable.h') }
-end 
+end
 
 # this symlinks every executable in the install subdirectory to the top of the directory tree
 # so that they are in the PATH
 execute "find #{node['sga']['install_path']}/src/bin -maxdepth 1 -name '*' -executable -exec ln -s {} . \\;" do
   cwd 'usr/local/bin'
 end
-
-
