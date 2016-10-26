@@ -18,8 +18,8 @@
 
 # For description of dependencies see: https://github.com/jts/sga/tree/master/src#readme
 
+include_recipe 'apt' if node['platform_family'] == 'debian'
 include_recipe 'build-essential'
-include_recipe 'apt'
 include_recipe 'git'
 include_recipe 'poise-python'
 
@@ -104,4 +104,8 @@ end
 # so that they are in the PATH
 execute "find #{node['sga']['install_path']}/src/bin -maxdepth 1 -name '*' -executable -exec ln -s {} . \\;" do
   cwd 'usr/local/bin'
+end
+
+magic_shell_environment 'LD_LIBRARY_PATH' do
+  value '/usr/local/lib:$LD_LIBRARY_PATH'
 end
