@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/EagleGenomics-cookbooks/sga.svg?branch=master)](https://travis-ci.org/EagleGenomics-cookbooks/sga)
+
 # SGA
 
 Description
